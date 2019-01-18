@@ -55,8 +55,8 @@ available in Icinga 2 can be enabled and configured with this module.
 
 This module depends on:
 
-* [puppetlabs/stdlib] >= 4.16.0 < 5.0.0
-* [puppetlabs/concat] >= 2.1.0 < 5.0.0
+* [puppetlabs/stdlib] >= 4.16.0 < 6.0.0
+* [puppetlabs/concat] >= 2.1.0 < 6.0.0
 
 Depending on your setup following modules may also be required:
 
@@ -69,11 +69,11 @@ Depending on your setup following modules may also be required:
 This module has been tested on:
 
 * Ruby >= 1.9
-* Debian 7, 8
-* Ubuntu 14.04, 16.04
+* Debian 7, 8, 9
+* Ubuntu 14.04, 16.04, 18.04
 * CentOS/RHEL 6, 7
     * **Caution:** CentOS 6 comes with Ruby 1.8.7 by default
-* OracleLinux 7
+* OracleLinux 6, 7
 * FreeBSD 10, 11
 * SLES 12
 * Windows Server 2012
