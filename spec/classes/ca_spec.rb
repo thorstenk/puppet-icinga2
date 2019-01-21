@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 describe('icinga2::pki::ca', :type => :class) do
-  let(:pre_condition) { [
+  let(:pre_condition) do
+    [
       "class { 'icinga2': features => [], constants => {'NodeName' => 'host.example.org'} }"
-  ] }
+    ]
+  end
 
   before(:all) do
     @ca_cert = "/var/lib/icinga2/ca/ca.crt"
@@ -11,7 +13,7 @@ describe('icinga2::pki::ca', :type => :class) do
   end
 
   on_supported_os.each do |os, facts|
-    let :facts do
+    let(:facts) do
       facts
     end
 
@@ -25,63 +27,100 @@ describe('icinga2::pki::ca', :type => :class) do
 
 
     context "#{os} with ca_cert => 'foo', ca_key => 'bar'" do
-      let(:params) {{:ca_cert => 'foo', :ca_key => 'bar'}}
+      let(:params) do
+        {
+          :ca_cert => 'foo',
+          :ca_key  => 'bar'
+        }
+      end
 
       it { is_expected.to contain_file(@ca_cert).with_content(/foo/) }
       it { is_expected.to contain_file(@ca_key).with_content(/bar/) }
     end
 
     context "#{os} with ssl_key_path = /foo/bar" do
-      let(:params) { {:ssl_key_path => '/foo/bar'} }
+      let(:params) do
+        {
+          :ssl_key_path => '/foo/bar'
+        }
+      end
 
       it { is_expected.to contain_file('/foo/bar')  }
     end
 
 
     context "#{os} with ssl_key_path = foo/bar (not a valid absolute path)" do
-      let(:params) { {:ssl_key_path => 'foo/bar'} }
+      let(:params) do
+        {
+          :ssl_key_path => 'foo/bar'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
     end
 
 
     context "#{os} with ssl_cert_path = /foo/bar" do
-      let(:params) { {:ssl_cert_path => '/foo/bar'} }
+      let(:params) do
+        {
+          :ssl_cert_path => '/foo/bar'
+        }
+      end
 
       it { is_expected.to contain_file('/foo/bar')  }
     end
 
 
     context "#{os} with ssl_cert_path = foo/bar (not a valid absolute path)" do
-      let(:params) { {:ssl_cert_path => 'foo/bar'} }
+      let(:params) do
+        {
+          :ssl_cert_path => 'foo/bar'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
     end
 
 
     context "#{os} with ssl_csr_path = /foo/bar" do
-      let(:params) { {:ssl_csr_path => '/foo/bar'} }
+      let(:params) do
+        {
+          :ssl_csr_path => '/foo/bar'
+        }
+      end
 
       it { is_expected.to contain_file('/foo/bar')  }
     end
 
 
     context "#{os} with ssl_csr_path = foo/bar (not a valid absolute path)" do
-      let(:params) { {:ssl_csr_path => 'foo/bar'} }
+      let(:params) do
+        {
+          :ssl_csr_path => 'foo/bar'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
     end
 
 
     context "#{os} with ssl_cacert_path = /foo/bar" do
-      let(:params) { {:ssl_cacert_path => '/foo/bar'} }
+      let(:params) do
+        {
+          :ssl_cacert_path => '/foo/bar'
+        }
+      end
 
       it { is_expected.to contain_file('/foo/bar')  }
     end
 
 
     context "#{os} with ssl_cacert_path = foo/bar (not a valid absolute path)" do
-      let(:params) { {:ssl_cacert_path => 'foo/bar'} }
+      let(:params) do
+        {
+          :ssl_cacert_path => 'foo/bar'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
     end
@@ -89,26 +128,31 @@ describe('icinga2::pki::ca', :type => :class) do
 end
 
 describe('icinga2::pki::ca', :type => :class) do
-  let(:facts) { {
-      :kernel => 'Windows',
-      :architecture => 'x86_64',
-      :osfamily => 'Windows',
-      :operatingsystem => 'Windows',
+  let(:facts) do
+    {
+      :kernel                    => 'Windows',
+      :architecture              => 'x86_64',
+      :osfamily                  => 'Windows',
+      :operatingsystem           => 'Windows',
       :operatingsystemmajrelease => '2012 R2',
       :path => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\facter\bin;
-               C:\Program Files\Puppet Labs\Puppet\hiera\bin;
-               C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
-               C:\Program Files\Puppet Labs\Puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
-               C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
-               C:\Windows\System32\WindowsPowerShell\v1.0\;
-               C:\ProgramData\chocolatey\bin;',
-  } }
-  let(:pre_condition) { [
+                C:\Program Files\Puppet Labs\Puppet\facter\bin;
+                C:\Program Files\Puppet Labs\Puppet\hiera\bin;
+                C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
+                C:\Program Files\Puppet Labs\Puppet\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
+                C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
+                C:\Windows\System32\WindowsPowerShell\v1.0\;
+                C:\ProgramData\chocolatey\bin;',
+    }
+  end
+
+  let(:pre_condition) do
+    [
       "class { 'icinga2': features => [], constants => {'NodeName' => 'host.example.org'} }"
-  ] }
+    ]
+  end
 
   before(:all) do
     @ca_cert = "C:/ProgramData/icinga2/var/lib/icinga2/ca/ca.crt"
@@ -126,63 +170,100 @@ describe('icinga2::pki::ca', :type => :class) do
 
 
   context "Windows 2012 R2 with ca_cert => 'foo', ca_key => 'bar'" do
-    let(:params) {{:ca_cert => 'foo', :ca_key => 'bar'}}
+    let(:params) do
+      {
+        :ca_cert => 'foo',
+        :ca_key  => 'bar'
+      }
+    end
 
     it { is_expected.to contain_file(@ca_cert).with_content(/foo/) }
     it { is_expected.to contain_file(@ca_key).with_content(/bar/) }
   end
 
   context "Windows 2012 R2 with ssl_key_path = /foo/bar" do
-    let(:params) { {:ssl_key_path => 'C:/ProgramData/icinga2/foo/bar'} }
+    let(:params) do
+      {
+        :ssl_key_path => 'C:/ProgramData/icinga2/foo/bar'
+      }
+    end
 
     it { is_expected.to contain_file('C:/ProgramData/icinga2/foo/bar')  }
   end
 
 
   context "Windows 2012 R2 with ssl_key_path = foo/bar (not a valid absolute path)" do
-    let(:params) { {:ssl_key_path => 'foo/bar'} }
+    let(:params) do
+      {
+        :ssl_key_path => 'foo/bar'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
   end
 
 
   context "Windows 2012 R2 with ssl_cert_path = C:/ProgramData/icinga2/foo/bar" do
-    let(:params) { {:ssl_cert_path => 'C:/ProgramData/icinga2/foo/bar'} }
+    let(:params) do
+      {
+        :ssl_cert_path => 'C:/ProgramData/icinga2/foo/bar'
+      }
+    end
 
     it { is_expected.to contain_file('C:/ProgramData/icinga2/foo/bar')  }
   end
 
 
   context "Windows 2012 R2 with ssl_cert_path = foo/bar (not a valid absolute path)" do
-    let(:params) { {:ssl_cert_path => 'foo/bar'} }
+    let(:params) do
+      {
+        :ssl_cert_path => 'foo/bar'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
   end
 
 
   context "Windows 2012 R2 with ssl_csr_path = C:/ProgramData/icinga2/foo/bar" do
-    let(:params) { {:ssl_csr_path => 'C:/ProgramData/icinga2/foo/bar'} }
+    let(:params) do
+      {
+        :ssl_csr_path => 'C:/ProgramData/icinga2/foo/bar'
+      }
+    end
 
     it { is_expected.to contain_file('C:/ProgramData/icinga2/foo/bar')  }
   end
 
 
   context "Windows 2012 R2 with ssl_csr_path = foo/bar (not a valid absolute path)" do
-    let(:params) { {:ssl_csr_path => 'foo/bar'} }
+    let(:params) do
+      {
+        :ssl_csr_path => 'foo/bar'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
   end
 
 
   context "Windows 2012 R2 with ssl_cacert_path = C:/ProgramData/icinga2/foo/bar" do
-    let(:params) { {:ssl_cacert_path => 'C:/ProgramData/icinga2/foo/bar'} }
+    let(:params) do
+      {
+        :ssl_cacert_path => 'C:/ProgramData/icinga2/foo/bar'
+      }
+    end
 
     it { is_expected.to contain_file('C:/ProgramData/icinga2/foo/bar')  }
   end
 
 
   context "Windows 2012 R2 with ssl_cacert_path = foo/bar (not a valid absolute path)" do
-    let(:params) { {:ssl_cacert_path => 'foo/bar'} }
+    let(:params) do
+      {
+        :ssl_cacert_path => 'foo/bar'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
   end

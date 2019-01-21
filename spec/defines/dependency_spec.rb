@@ -1,21 +1,29 @@
 require 'spec_helper'
 
 describe('icinga2::object::dependency', :type => :define) do
-  let(:title) { 'bar' }
-  let(:pre_condition) { [
+  let(:title) do
+    'bar'
+  end
+
+  let(:pre_condition) do
+    [
       "class { 'icinga2': }"
-  ] }
+    ]
+  end
 
   on_supported_os.each do |os, facts|
-    let :facts do
+    let(:facts) do
       facts
     end
 
     context "#{os} with all defaults and target => /bar/baz" do
-      let(:params) { {
-          :target =>  '/bar/baz',
+      let(:params) do
+        {
+          :target           =>  '/bar/baz',
           :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :child_host_name  => 'childfoo'
+        }
+      end
 
       it { is_expected.to contain_concat('/bar/baz') }
 
@@ -31,7 +39,12 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with dependency_name => foo" do
-      let(:params) { {:dependency_name => 'foo', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :dependency_name => 'foo',
+          :target          => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                               .with({'target' => '/bar/baz'})
@@ -40,10 +53,13 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with parent_host_name => foo" do
-      let(:params) { {
+      let(:params) do
+        {
           :parent_host_name => 'foo',
-          :target => '/bar/baz',
-          :child_host_name => 'childfoo'} }
+          :target           => '/bar/baz',
+          :child_host_name   => 'childfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                               .with({'target' => '/bar/baz'})
@@ -52,11 +68,14 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with parent_service_name => foo" do
-      let(:params) { {
+      let(:params) do
+        {
           :parent_service_name => 'foo',
-          :target => '/bar/baz',
-          :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :target              => '/bar/baz',
+          :parent_host_name    => 'parentfoo',
+          :child_host_name     => 'childfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                               .with({'target' => '/bar/baz'})
@@ -65,10 +84,13 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with child_host_name => foo" do
-      let(:params) { {
-          :child_host_name => 'foo',
-          :target => '/bar/baz',
-          :parent_host_name => 'parentfoo'} }
+      let(:params) do
+        {
+          :child_host_name  => 'foo',
+          :target           => '/bar/baz',
+          :parent_host_name => 'parentfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                               .with({'target' => '/bar/baz'})
@@ -77,11 +99,14 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with child_service_name => foo" do
-      let(:params) { {
+      let(:params) do
+        {
           :child_service_name => 'foo',
-          :target => '/bar/baz',
-          :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :target             => '/bar/baz',
+          :parent_host_name   => 'parentfoo',
+          :child_host_name    => 'childfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                               .with({'target' => '/bar/baz'})
@@ -90,11 +115,14 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with disable_checks => false" do
-      let(:params) { {
-          :disable_checks => false,
-          :target => '/bar/baz',
+      let(:params) do
+        {
+          :disable_checks   => false,
+          :target           => '/bar/baz',
           :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :child_host_name  => 'childfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                               .with({'target' => '/bar/baz'})
@@ -103,22 +131,28 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with disable_checks => foo (not a valid boolean)" do
-      let(:params) { {
-          :disable_checks => 'foo',
-          :target => '/bar/baz',
+      let(:params) do
+        {
+          :disable_checks   => 'foo',
+          :target           => '/bar/baz',
           :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :child_host_name  => 'childfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
     end
 
 
     context "#{os} with disable_notifications => false" do
-      let(:params) { {
+      let(:params) do
+        {
           :disable_notifications => false,
-          :target => '/bar/baz',
-          :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :target                => '/bar/baz',
+          :parent_host_name      => 'parentfoo',
+          :child_host_name       => 'childfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                               .with({'target' => '/bar/baz'})
@@ -127,22 +161,28 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with disable_notifications => foo (not a valid boolean)" do
-      let(:params) { {
+      let(:params) do
+        {
           :disable_notifications => 'foo',
-          :target => '/bar/baz',
-          :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :target                => '/bar/baz',
+          :parent_host_name      => 'parentfoo',
+          :child_host_name       => 'childfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
     end
 
 
     context "#{os} with ignore_soft_states => false" do
-      let(:params) { {
+      let(:params) do
+        {
           :ignore_soft_states => false,
-          :target => '/bar/baz',
-          :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :target             => '/bar/baz',
+          :parent_host_name   => 'parentfoo',
+          :child_host_name    => 'childfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                               .with({'target' => '/bar/baz'})
@@ -151,22 +191,28 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with ignore_soft_states => foo (not a valid boolean)" do
-      let(:params) { {
+      let(:params) do
+        {
           :ignore_soft_states => 'foo',
-          :target => '/bar/baz',
-          :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :target             => '/bar/baz',
+          :parent_host_name   => 'parentfoo',
+          :child_host_name    => 'childfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
     end
 
 
     context "#{os} with period => foo" do
-      let(:params) { {
-          :period => 'foo',
-          :target => '/bar/baz',
+      let(:params) do
+        {
+          :period           => 'foo',
+          :target           => '/bar/baz',
           :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :child_host_name  => 'childfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                               .with({'target' => '/bar/baz'})
@@ -175,11 +221,14 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with states => [foo, bar]" do
-      let(:params) { {
-          :states => ['foo','bar'],
-          :target => '/bar/baz',
+      let(:params) do
+        {
+          :states           => ['foo','bar'],
+          :target           => '/bar/baz',
           :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :child_host_name  => 'childfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                               .with({'target' => '/bar/baz'})
@@ -188,11 +237,14 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
     context "#{os} with states => foo (not a valid array)" do
-      let(:params) { {
-          :states => 'foo',
-          :target => '/bar/baz',
+      let(:params) do
+        {
+          :states           => 'foo',
+          :target           => '/bar/baz',
           :parent_host_name => 'parentfoo',
-          :child_host_name => 'childfoo'} }
+          :child_host_name  => 'childfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not an Array/) }
     end
@@ -200,34 +252,45 @@ describe('icinga2::object::dependency', :type => :define) do
 end
 
 describe('icinga2::object::dependency', :type => :define) do
-  let(:facts) { {
-      :kernel => 'Windows',
-      :architecture => 'x86_64',
-      :osfamily => 'Windows',
-      :operatingsystem => 'Windows',
+  let(:facts) do
+    {
+      :kernel                    => 'Windows',
+      :architecture              => 'x86_64',
+      :osfamily                  => 'Windows',
+      :operatingsystem           => 'Windows',
       :operatingsystemmajrelease => '2012 R2',
       :path => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\facter\bin;
-               C:\Program Files\Puppet Labs\Puppet\hiera\bin;
-               C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
-               C:\Program Files\Puppet Labs\Puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
-               C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
-               C:\Windows\System32\WindowsPowerShell\v1.0\;
-               C:\ProgramData\chocolatey\bin;',
-  } }
-  let(:title) { 'bar' }
-  let(:pre_condition) { [
+                C:\Program Files\Puppet Labs\Puppet\facter\bin;
+                C:\Program Files\Puppet Labs\Puppet\hiera\bin;
+                C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
+                C:\Program Files\Puppet Labs\Puppet\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
+                C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
+                C:\Windows\System32\WindowsPowerShell\v1.0\;
+                C:\ProgramData\chocolatey\bin;',
+    }
+  end
+
+  let(:title) do
+    'bar'
+  end
+
+  let(:pre_condition) do
+    [
       "class { 'icinga2': }"
-  ] }
+    ]
+  end
 
 
   context "Windows 2012 R2 with all defaults and target => C:/bar/baz" do
-    let(:params) { {
-        :target =>  'C:/bar/baz',
+    let(:params) do
+      {
+        :target           =>  'C:/bar/baz',
         :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :child_host_name  => 'childfoo'
+      }
+    end
 
     it { is_expected.to contain_concat('C:/bar/baz') }
 
@@ -243,7 +306,12 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with dependency_name => foo" do
-    let(:params) { {:dependency_name => 'foo', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :dependency_name => 'foo',
+        :target          => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -252,10 +320,13 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with parent_host_name => foo" do
-    let(:params) { {
+    let(:params) do
+      {
         :parent_host_name => 'foo',
-        :target => 'C:/bar/baz',
-        :child_host_name => 'childfoo'} }
+        :target           => 'C:/bar/baz',
+        :child_host_name  => 'childfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -264,11 +335,14 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with parent_service_name => foo" do
-    let(:params) { {
+    let(:params) do
+      {
         :parent_service_name => 'foo',
-        :target => 'C:/bar/baz',
-        :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :target              => 'C:/bar/baz',
+        :parent_host_name    => 'parentfoo',
+        :child_host_name     => 'childfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -277,10 +351,13 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with child_host_name => foo" do
-    let(:params) { {
-        :child_host_name => 'foo',
-        :target => 'C:/bar/baz',
-        :parent_host_name => 'parentfoo'} }
+    let(:params) do
+      {
+        :child_host_name  => 'foo',
+        :target           => 'C:/bar/baz',
+        :parent_host_name => 'parentfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -289,11 +366,14 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with child_service_name => foo" do
-    let(:params) { {
+    let(:params) do
+      {
         :child_service_name => 'foo',
-        :target => 'C:/bar/baz',
-        :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :target             => 'C:/bar/baz',
+        :parent_host_name   => 'parentfoo',
+        :child_host_name    => 'childfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -302,11 +382,14 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with disable_checks => false" do
-    let(:params) { {
-        :disable_checks => false,
-        :target => 'C:/bar/baz',
+    let(:params) do
+      {
+        :disable_checks   => false,
+        :target           => 'C:/bar/baz',
         :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :child_host_name  => 'childfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -315,22 +398,28 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with disable_checks => foo (not a valid boolean)" do
-    let(:params) { {
-        :disable_checks => 'foo',
-        :target => 'C:/bar/baz',
+    let(:params) do
+      {
+        :disable_checks   => 'foo',
+        :target           => 'C:/bar/baz',
         :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :child_host_name  => 'childfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
   end
 
 
   context "Windows 2012 R2 with disable_notifications => false" do
-    let(:params) { {
+    let(:params) do
+      {
         :disable_notifications => false,
-        :target => 'C:/bar/baz',
-        :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :target                => 'C:/bar/baz',
+        :parent_host_name      => 'parentfoo',
+        :child_host_name       => 'childfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -339,22 +428,28 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with disable_notifications => foo (not a valid boolean)" do
-    let(:params) { {
+    let(:params) do
+      {
         :disable_notifications => 'foo',
-        :target => 'C:/bar/baz',
-        :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :target                => 'C:/bar/baz',
+        :parent_host_name      => 'parentfoo',
+        :child_host_name       => 'childfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
   end
 
 
   context "Windows 2012 R2 with ignore_soft_states => false" do
-    let(:params) { {
+    let(:params) do
+      {
         :ignore_soft_states => false,
-        :target => 'C:/bar/baz',
-        :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :target             => 'C:/bar/baz',
+        :parent_host_name   => 'parentfoo',
+        :child_host_name    => 'childfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -363,22 +458,28 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with ignore_soft_states => foo (not a valid boolean)" do
-    let(:params) { {
+    let(:params) do
+      {
         :ignore_soft_states => 'foo',
-        :target => 'C:/bar/baz',
-        :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :target             => 'C:/bar/baz',
+        :parent_host_name   => 'parentfoo',
+        :child_host_name    => 'childfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
   end
 
 
   context "Windows 2012 R2 with period => foo" do
-    let(:params) { {
-        :period => 'foo',
-        :target => 'C:/bar/baz',
+    let(:params) do
+      {
+        :period           => 'foo',
+        :target           => 'C:/bar/baz',
         :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :child_host_name  => 'childfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -387,11 +488,14 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with states => [foo, bar]" do
-    let(:params) { {
-        :states => ['foo','bar'],
-        :target => 'C:/bar/baz',
+    let(:params) do
+      {
+        :states           => ['foo','bar'],
+        :target           => 'C:/bar/baz',
         :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :child_host_name  => 'childfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Dependency::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -400,11 +504,14 @@ describe('icinga2::object::dependency', :type => :define) do
 
 
   context "Windows 2012 R2 with states => foo (not a valid array)" do
-    let(:params) { {
-        :states => 'foo',
-        :target => 'C:/bar/baz',
+    let(:params) do
+      {
+        :states           => 'foo',
+        :target           => 'C:/bar/baz',
         :parent_host_name => 'parentfoo',
-        :child_host_name => 'childfoo'} }
+        :child_host_name  => 'childfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not an Array/) }
   end

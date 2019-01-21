@@ -4,7 +4,7 @@ describe('icinga2', :type => :class) do
 
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let :facts do
+      let(:facts) do
         facts
       end
 
@@ -108,7 +108,11 @@ describe('icinga2', :type => :class) do
         end
 
         context "#{os} with manage_package => false" do
-          let(:params) { {:manage_package => false} }
+          let(:params) do
+            {
+              :manage_package => false
+            }
+          end
 
           it { should_not contain_package('icinga2').with({ 'ensure' => 'installed' }) }
         end
@@ -118,7 +122,8 @@ describe('icinga2', :type => :class) do
 end
 
 describe('icinga2', :type => :class) do
-  let(:facts) { {
+  let(:facts) do
+    {
       :kernel => 'Windows',
       :architecture => 'x86_64',
       :osfamily => 'Windows',
@@ -134,7 +139,8 @@ describe('icinga2', :type => :class) do
                C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
                C:\Windows\System32\WindowsPowerShell\v1.0\;
                C:\ProgramData\chocolatey\bin;',
-  } }
+    }
+  end
 
   before(:all) do
     @icinga2_conf = "C:/ProgramData/icinga2/etc/icinga2/icinga2.conf"
@@ -202,17 +208,23 @@ describe('icinga2', :type => :class) do
   end
 
   context "Windows 2012 R2 with manage_package => false" do
-    let(:params) { {:manage_package => false} }
+    let(:params) do
+      {
+        :manage_package => false
+      }
+    end
 
     it { should_not contain_package('icinga2').with({ 'ensure' => 'installed' }) }
   end
 end
 
 describe('icinga2', :type => :class) do
-  let(:facts) { {
+  let(:facts) do
+    {
       :kernel => 'foo',
       :osfamily => 'bar',
-  } }
+    }
+  end
 
   context 'on unsupported plattform' do
     it { is_expected.to raise_error(Puppet::Error, /bar is not supported/) }

@@ -1,22 +1,30 @@
 require 'spec_helper'
 
 describe('icinga2::object::service', :type => :define) do
-  let(:title) { 'bar' }
-  let(:pre_condition) { [
+  let(:title) do
+    'bar'
+  end
+
+  let(:pre_condition) do
+    [
       "class { 'icinga2': }"
-  ] }
+    ]
+  end
 
   on_supported_os.each do |os, facts|
-    let :facts do
+    let(:facts) do
       facts
     end
 
 
     context "#{os} with all defaults and target => /bar/baz" do
-      let(:params) { {
-          :target => '/bar/baz',
-          :host_name => 'hostfoo',
-          :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat('/bar/baz') }
 
@@ -30,9 +38,13 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with service_name => foo" do
-      let(:params) { {:service_name => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :service_name  => 'foo', :target => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -41,9 +53,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with display_name => foo" do
-      let(:params) { {:display_name => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :display_name  => 'foo',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -52,8 +69,13 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with host_name => foo" do
-      let(:params) { {:host_name => 'foo', :target => '/bar/baz',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :host_name     => 'foo',
+          :target        => '/bar/baz',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -62,9 +84,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with groups => [foo, bar]" do
-      let(:params) { {:groups => ['foo','bar'], :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :groups        => ['foo','bar'],
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -73,17 +100,27 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with groups => foo (not a valid array)" do
-      let(:params) { {:groups => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :groups        => 'foo',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not an Array/) }
     end
 
     context "#{os} with vars => { foo => 'bar', bar => 'foo' }" do
-      let(:params) { {:vars => { 'foo' => "bar", 'bar' => "foo"}, :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo' } }
+      let(:params) do
+        {
+          :vars          => { 'foo' => "bar", 'bar' => "foo"},
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({ 'target' => '/bar/baz' })
@@ -93,8 +130,13 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with check_command => foo" do
-      let(:params) { {:check_command => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo'} }
+      let(:params) do
+        {
+          :check_command => 'foo',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -103,9 +145,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with max_check_attempts => 30" do
-      let(:params) { {:max_check_attempts => '30', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :max_check_attempts => '30',
+          :target             => '/bar/baz',
+          :host_name          => 'hostfoo',
+          :check_command      => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -114,9 +161,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with max_check_attempts => foo (not a valid integer)" do
-      let(:params) { {:max_check_attempts => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :max_check_attempts => 'foo',
+          :target             => '/bar/baz',
+          :host_name          => 'hostfoo',
+          :check_command      => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /first argument to be an Integer/) }
     end
@@ -124,8 +176,13 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with check_period => foo" do
-      let(:params) { {:check_period => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo'} }
+      let(:params) do
+        {
+          :check_period => 'foo',
+          :target       => '/bar/baz',
+          :host_name    => 'hostfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -134,7 +191,12 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with check_interval => 1m" do
-      let(:params) { {:check_interval => '1m', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :check_interval => '1m',
+          :target         => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -143,16 +205,27 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with check_interval => foo (not a valid value)" do
-      let(:params) { {:check_interval => 'foo', :target => '/bar/baz', :check_command => 'foocommand'} }
+      let(:params) do
+        {
+          :check_interval => 'foo',
+          :target         => '/bar/baz',
+          :check_command  => 'foocommand'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" does not match/) }
     end
 
 
     context "#{os} with retry_interval => 30s" do
-      let(:params) { {:retry_interval => '30s', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :retry_interval => '30s',
+          :target         => '/bar/baz',
+          :host_name      => 'hostfoo',
+          :check_command  => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -161,18 +234,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with retry_interval => foo (not a valid value)" do
-      let(:params) { {:retry_interval => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :retry_interval => 'foo',
+          :target         => '/bar/baz',
+          :host_name      => 'hostfoo',
+          :check_command  => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" does not match/) }
     end
 
 
     context "#{os} with enable_notifications => false" do
-      let(:params) { {:enable_notifications => false, :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_notifications => false,
+          :target               => '/bar/baz',
+          :host_name            => 'hostfoo',
+          :check_command        => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -181,18 +264,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with enable_notifications => foo (not a valid boolean)" do
-      let(:params) { {:enable_notifications => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_notifications => 'foo',
+          :target               => '/bar/baz',
+          :host_name            => 'hostfoo',
+          :check_command        => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
     end
 
 
     context "#{os} with enable_active_checks => false" do
-      let(:params) { {:enable_active_checks => false, :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_active_checks => false,
+          :target               => '/bar/baz',
+          :host_name            => 'hostfoo',
+          :check_command        => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -201,18 +294,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with enable_active_checks => foo (not a valid boolean)" do
-      let(:params) { {:enable_active_checks => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_active_checks => 'foo',
+          :target               => '/bar/baz',
+          :host_name            => 'hostfoo',
+          :check_command        => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
     end
 
 
     context "#{os} with enable_passive_checks => false" do
-      let(:params) { {:enable_passive_checks => false, :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_passive_checks => false,
+          :target                => '/bar/baz',
+          :host_name             => 'hostfoo',
+          :check_command         => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -221,18 +324,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with enable_passive_checks => foo (not a valid boolean)" do
-      let(:params) { {:enable_passive_checks => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_passive_checks => 'foo',
+          :target                => '/bar/baz',
+          :host_name             => 'hostfoo',
+          :check_command         => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
     end
 
 
     context "#{os} with enable_event_handler => false" do
-      let(:params) { {:enable_event_handler => false, :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_event_handler => false,
+          :target               => '/bar/baz',
+          :host_name            => 'hostfoo',
+          :check_command        => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -241,18 +354,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with enable_event_handler => foo (not a valid boolean)" do
-      let(:params) { {:enable_event_handler => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_event_handler => 'foo',
+          :target               => '/bar/baz',
+          :host_name            => 'hostfoo',
+          :check_command        => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
     end
 
 
     context "#{os} with enable_flapping => false" do
-      let(:params) { {:enable_flapping => false, :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_flapping => false,
+          :target          => '/bar/baz',
+          :host_name       => 'hostfoo',
+          :check_command   => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -261,18 +384,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with enable_flapping => foo (not a valid boolean)" do
-      let(:params) { {:enable_flapping => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_flapping => 'foo',
+          :target          => '/bar/baz',
+          :host_name       => 'hostfoo',
+          :check_command   => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
     end
 
 
     context "#{os} with enable_perfdata => false" do
-      let(:params) { {:enable_perfdata => false, :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_perfdata => false,
+          :target          => '/bar/baz',
+          :host_name       => 'hostfoo',
+          :check_command   => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -281,18 +414,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with enable_perfdata => foo (not a valid boolean)" do
-      let(:params) { {:enable_perfdata => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :enable_perfdata => 'foo',
+          :target          => '/bar/baz',
+          :host_name       => 'hostfoo',
+          :check_command   => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
     end
 
 
     context "#{os} with event_command => foo" do
-      let(:params) { {:event_command => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :event_command => 'foo',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -301,9 +444,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with flapping_threshold => 30" do
-      let(:params) { {:flapping_threshold => '30', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :flapping_threshold => '30',
+          :target             => '/bar/baz',
+          :host_name          => 'hostfoo',
+          :check_command      => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -312,18 +460,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with flapping_threshold => foo (not a valid integer)" do
-      let(:params) { {:flapping_threshold => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :flapping_threshold => 'foo',
+          :target             => '/bar/baz',
+          :host_name          => 'hostfoo',
+          :check_command      => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /first argument to be an Integer/) }
     end
 
 
     context "#{os} with volatile => false" do
-      let(:params) { {:volatile => false, :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :volatile      => false,
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -332,18 +490,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with volatile => foo (not a valid boolean)" do
-      let(:params) { {:volatile => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :volatile      => 'foo',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
     end
 
 
     context "#{os} with zone => foo" do
-      let(:params) { {:zone => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :zone          => 'foo',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -352,9 +520,13 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with command_endpoint => foo" do
-      let(:params) { {:command_endpoint => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :command_endpoint => 'foo', :target => '/bar/baz',
+          :host_name        => 'hostfoo',
+          :check_command    => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -363,9 +535,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with notes => foo" do
-      let(:params) { {:notes => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :notes         => 'foo',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -374,9 +551,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with notes_url => foo" do
-      let(:params) { {:notes_url => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :notes_url     => 'foo',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -385,9 +567,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with action_url => foo" do
-      let(:params) { {:action_url => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :action_url    => 'foo',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -396,9 +583,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with icon_image = /foo/bar" do
-      let(:params) { {:icon_image => '/foo/bar', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :icon_image    => '/foo/bar',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({ 'target' => '/bar/baz' })
@@ -407,18 +599,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
     context "#{os} with icon_image = foo/bar (not a valid absolute path)" do
-      let(:params) { {:icon_image => 'foo/bar', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :icon_image    => 'foo/bar',
+          :target        => '/bar/baz',
+          :host_name     => 'hostfoo',
+          :check_command => 'commandfoo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
     end
 
 
     context "#{os} with icon_image_alt => foo" do
-      let(:params) { {:icon_image_alt => 'foo', :target => '/bar/baz',
-                      :host_name => 'hostfoo',
-                      :check_command => 'commandfoo'} }
+      let(:params) do
+        {
+          :icon_image_alt => 'foo',
+          :target         => '/bar/baz',
+          :host_name      => 'hostfoo',
+          :check_command  => 'commandfoo'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                               .with({'target' => '/bar/baz'})
@@ -428,34 +630,45 @@ describe('icinga2::object::service', :type => :define) do
 end
 
 describe('icinga2::object::service', :type => :define) do
-  let(:facts) { {
-      :kernel => 'Windows',
-      :architecture => 'x86_64',
-      :osfamily => 'Windows',
-      :operatingsystem => 'Windows',
+  let(:facts) do
+    {
+      :kernel                    => 'Windows',
+      :architecture              => 'x86_64',
+      :osfamily                  => 'Windows',
+      :operatingsystem           => 'Windows',
       :operatingsystemmajrelease => '2012 R2',
       :path => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\facter\bin;
-               C:\Program Files\Puppet Labs\Puppet\hiera\bin;
-               C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
-               C:\Program Files\Puppet Labs\Puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
-               C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
-               C:\Windows\System32\WindowsPowerShell\v1.0\;
-               C:\ProgramData\chocolatey\bin;',
-  } }
-  let(:title) { 'bar' }
-  let(:pre_condition) { [
+                C:\Program Files\Puppet Labs\Puppet\facter\bin;
+                C:\Program Files\Puppet Labs\Puppet\hiera\bin;
+                C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
+                C:\Program Files\Puppet Labs\Puppet\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
+                C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
+                C:\Windows\System32\WindowsPowerShell\v1.0\;
+                C:\ProgramData\chocolatey\bin;',
+    }
+  end
+
+  let(:title) do
+     'bar'
+  end
+
+  let(:pre_condition) do
+    [
       "class { 'icinga2': }"
-  ] }
+    ]
+  end
 
 
   context "Windows 2012 R2 with all defaults and target => C:/bar/baz" do
-    let(:params) { {
-        :target => 'C:/bar/baz',
-        :host_name => 'hostfoo',
-        :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat('C:/bar/baz') }
 
@@ -469,9 +682,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with service_name => foo" do
-    let(:params) { {:service_name => 'foo', :target => 'C:/bar/baz',
-                        :host_name => 'hostfoo',
-                        :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :service_name  => 'foo',
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                         .with({'target' => 'C:/bar/baz'})
@@ -480,9 +698,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with display_name => foo" do
-    let(:params) { {:display_name => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+       :display_name  => 'foo',
+       :target        => 'C:/bar/baz',
+       :host_name     => 'hostfoo',
+       :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -491,8 +714,13 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with host_name => foo" do
-    let(:params) { {:host_name => 'foo', :target => 'C:/bar/baz',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :host_name     => 'foo',
+        :target        => 'C:/bar/baz',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -501,9 +729,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with groups => [foo, bar]" do
-    let(:params) { {:groups => ['foo','bar'], :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :groups        => ['foo','bar'],
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -512,17 +745,27 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with groups => foo (not a valid array)" do
-    let(:params) { {:groups => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :groups        => 'foo',
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not an Array/) }
   end
 
   context "Windows 2012 R2 with vars => { foo => 'bar', bar => 'foo' }" do
-    let(:params) { {:vars => { 'foo' => "bar", 'bar' => "foo"}, :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo' } }
+    let(:params) do
+      {
+        :vars          => { 'foo' => "bar", 'bar' => "foo"},
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({ 'target' => 'C:/bar/baz' })
@@ -532,8 +775,13 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with check_command => foo" do
-    let(:params) { {:check_command => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo'} }
+    let(:params) do
+      {
+        :check_command => 'foo',
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -542,9 +790,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with max_check_attempts => 30" do
-    let(:params) { {:max_check_attempts => '30', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :max_check_attempts => '30',
+        :target             => 'C:/bar/baz',
+        :host_name          => 'hostfoo',
+        :check_command      => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -553,17 +806,27 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with max_check_attempts => foo (not a valid integer)" do
-    let(:params) { {:max_check_attempts => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :max_check_attempts => 'foo',
+        :target             => 'C:/bar/baz',
+        :host_name          => 'hostfoo',
+        :check_command      => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /first argument to be an Integer/) }
   end
 
 
   context "Windows 2012 R2 with check_period => foo" do
-    let(:params) { {:check_period => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo'} }
+    let(:params) do
+      {
+        :check_period => 'foo',
+        :target      => 'C:/bar/baz',
+        :host_name   => 'hostfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -572,7 +835,12 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with check_interval => 1m" do
-    let(:params) { {:check_interval => '1m', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :check_interval => '1m',
+        :target         => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -581,16 +849,27 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with check_interval => foo (not a valid value)" do
-    let(:params) { {:check_interval => 'foo', :target => 'C:/bar/baz', :check_command => 'foocommand'} }
+    let(:params) do
+      {
+        :check_interval => 'foo',
+        :target         => 'C:/bar/baz',
+        :check_command  => 'foocommand'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" does not match/) }
   end
 
 
   context "Windows 2012 R2 with retry_interval => 30s" do
-    let(:params) { {:retry_interval => '30s', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :retry_interval => '30s',
+        :target         => 'C:/bar/baz',
+        :host_name      => 'hostfoo',
+        :check_command  => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -599,18 +878,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with retry_interval => foo (not a valid value)" do
-    let(:params) { {:retry_interval => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :retry_interval => 'foo',
+        :target         => 'C:/bar/baz',
+        :host_name      => 'hostfoo',
+        :check_command  => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" does not match/) }
   end
 
 
   context "Windows 2012 R2 with enable_notifications => false" do
-    let(:params) { {:enable_notifications => false, :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_notifications => false,
+        :target               => 'C:/bar/baz',
+        :host_name            => 'hostfoo',
+        :check_command        => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -619,18 +908,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with enable_notifications => foo (not a valid boolean)" do
-    let(:params) { {:enable_notifications => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_notifications => 'foo',
+        :target               => 'C:/bar/baz',
+        :host_name            => 'hostfoo',
+        :check_command        => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
   end
 
 
   context "Windows 2012 R2 with enable_active_checks => false" do
-    let(:params) { {:enable_active_checks => false, :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_active_checks => false,
+        :target               => 'C:/bar/baz',
+        :host_name            => 'hostfoo',
+        :check_command        => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -639,18 +938,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with enable_active_checks => foo (not a valid boolean)" do
-    let(:params) { {:enable_active_checks => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_active_checks => 'foo',
+        :target               => 'C:/bar/baz',
+        :host_name            => 'hostfoo',
+        :check_command        => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
   end
 
 
   context "Windows 2012 R2 with enable_passive_checks => false" do
-    let(:params) { {:enable_passive_checks => false, :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_passive_checks => false,
+        :target                => 'C:/bar/baz',
+        :host_name             => 'hostfoo',
+        :check_command         => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -659,18 +968,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with enable_passive_checks => foo (not a valid boolean)" do
-    let(:params) { {:enable_passive_checks => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_passive_checks => 'foo',
+        :target                => 'C:/bar/baz',
+        :host_name             => 'hostfoo',
+        :check_command         => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
   end
 
 
   context "Windows 2012 R2 with enable_event_handler => false" do
-    let(:params) { {:enable_event_handler => false, :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_event_handler => false,
+        :target               => 'C:/bar/baz',
+        :host_name            => 'hostfoo',
+        :check_command        => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -679,18 +998,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with enable_event_handler => foo (not a valid boolean)" do
-    let(:params) { {:enable_event_handler => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_event_handler => 'foo',
+        :target               => 'C:/bar/baz',
+        :host_name            => 'hostfoo',
+        :check_command        => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
   end
 
 
   context "Windows 2012 R2 with enable_flapping => false" do
-    let(:params) { {:enable_flapping => false, :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_flapping => false,
+        :target          => 'C:/bar/baz',
+        :host_name       => 'hostfoo',
+        :check_command   => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -699,18 +1028,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with enable_flapping => foo (not a valid boolean)" do
-    let(:params) { {:enable_flapping => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_flapping => 'foo',
+        :target          => 'C:/bar/baz',
+        :host_name       => 'hostfoo',
+        :check_command   => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
   end
 
 
   context "Windows 2012 R2 with enable_perfdata => false" do
-    let(:params) { {:enable_perfdata => false, :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_perfdata => false,
+        :target          => 'C:/bar/baz',
+        :host_name       => 'hostfoo',
+        :check_command   => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -719,18 +1058,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with enable_perfdata => foo (not a valid boolean)" do
-    let(:params) { {:enable_perfdata => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :enable_perfdata => 'foo',
+        :target          => 'C:/bar/baz',
+        :host_name       => 'hostfoo',
+        :check_command   => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
   end
 
 
   context "Windows 2012 R2 with event_command => foo" do
-    let(:params) { {:event_command => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :event_command => 'foo',
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -739,9 +1088,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with flapping_threshold => 30" do
-    let(:params) { {:flapping_threshold => '30', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :flapping_threshold => '30',
+        :target             => 'C:/bar/baz',
+        :host_name          => 'hostfoo',
+        :check_command      => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -750,18 +1104,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with flapping_threshold => foo (not a valid integer)" do
-    let(:params) { {:flapping_threshold => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :flapping_threshold => 'foo',
+        :target             => 'C:/bar/baz',
+        :host_name          => 'hostfoo',
+        :check_command      => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /first argument to be an Integer/) }
   end
 
 
   context "Windows 2012 R2 with volatile => false" do
-    let(:params) { {:volatile => false, :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :volatile      => false,
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -770,18 +1134,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with volatile => foo (not a valid boolean)" do
-    let(:params) { {:volatile => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :volatile      => 'foo',
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a boolean/) }
   end
 
 
   context "Windows 2012 R2 with zone => foo" do
-    let(:params) { {:zone => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :zone          => 'foo',
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -790,9 +1164,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with command_endpoint => foo" do
-    let(:params) { {:command_endpoint => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :command_endpoint => 'foo',
+        :target           => 'C:/bar/baz',
+        :host_name        => 'hostfoo',
+        :check_command    => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -801,9 +1180,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with notes => foo" do
-    let(:params) { {:notes => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :notes         => 'foo',
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -812,9 +1196,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with notes_url => foo" do
-    let(:params) { {:notes_url => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :notes_url     => 'foo',
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -823,9 +1212,14 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with action_url => foo" do
-    let(:params) { {:action_url => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :action_url => 'foo',
+        :target => 'C:/bar/baz',
+        :host_name => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -833,9 +1227,14 @@ describe('icinga2::object::service', :type => :define) do
   end
 
   context "Windows 2012 R2 with icon_image = /foo/bar" do
-    let(:params) { {:icon_image => '/foo/bar', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :icon_image    => '/foo/bar',
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({ 'target' => 'C:/bar/baz' })
@@ -844,18 +1243,28 @@ describe('icinga2::object::service', :type => :define) do
 
 
   context "Windows 2012 R2 with icon_image = foo/bar (not a valid absolute path)" do
-    let(:params) { {:icon_image => 'foo/bar', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :icon_image    => 'foo/bar',
+        :target        => 'C:/bar/baz',
+        :host_name     => 'hostfoo',
+        :check_command => 'commandfoo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
   end
 
 
   context "Windows 2012 R2 with icon_image_alt => foo" do
-    let(:params) { {:icon_image_alt => 'foo', :target => 'C:/bar/baz',
-                    :host_name => 'hostfoo',
-                    :check_command => 'commandfoo'} }
+    let(:params) do
+      {
+        :icon_image_alt => 'foo',
+        :target         => 'C:/bar/baz',
+        :host_name      => 'hostfoo',
+        :check_command  => 'commandfoo'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Service::bar')
                             .with({'target' => 'C:/bar/baz'})

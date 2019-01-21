@@ -1,19 +1,29 @@
 require 'spec_helper'
 
 describe('icinga2::object::apiuser', :type => :define) do
-  let(:title) { 'bar' }
-  let(:pre_condition) { [
-    "class { 'icinga2': }"
-  ] }
+  let(:title) do
+    'bar'
+  end
+
+  let(:pre_condition) do
+    [
+      "class { 'icinga2': }"
+    ]
+  end
 
   on_supported_os.each do |os, facts|
-    let :facts do
+    let(:facts) do
       facts
     end
 
 
     context "#{os} with all defaults and permissions => ['*'], target => /bar/baz" do
-      let(:params) { {:target =>  '/bar/baz', :permissions => ['*']} }
+      let(:params) do
+        {
+          :target      =>  '/bar/baz',
+          :permissions => ['*']
+        }
+      end
 
       it { is_expected.to contain_concat('/bar/baz') }
 
@@ -28,14 +38,25 @@ describe('icinga2::object::apiuser', :type => :define) do
 
 
     context "#{os} with target => bar/baz (not valid absolute path)" do
-      let(:params) { {:target => 'bar/baz', :permissions => ['*']} }
+      let(:params) do
+        {
+          :target      => 'bar/baz',
+          :permissions => ['*']
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"bar\/baz" is not an absolute path/) }
     end
 
 
     context "#{os} with password => foo" do
-      let(:params) { {:password => 'foo', :permissions => ['*'], :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :password    => 'foo',
+          :permissions => ['*'],
+          :target      => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::ApiUser::bar')
         .with({'target' => '/bar/baz'})
@@ -44,7 +65,13 @@ describe('icinga2::object::apiuser', :type => :define) do
 
 
     context "#{os} with client_cn => foo" do
-      let(:params) { {:client_cn => 'foo', :permissions => ['*'], :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :client_cn   => 'foo',
+          :permissions => ['*'],
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::ApiUser::bar')
         .with({'target' => '/bar/baz'})
@@ -53,7 +80,12 @@ describe('icinga2::object::apiuser', :type => :define) do
 
 
     context "#{os} with permissions => [foo, bar]" do
-      let(:params) { {:permissions => ['foo', 'bar'], :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :permissions => ['foo', 'bar'],
+          :target      => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::ApiUser::bar')
         .with({'target' => '/bar/baz'})
@@ -62,7 +94,12 @@ describe('icinga2::object::apiuser', :type => :define) do
 
 
     context "#{os} with permissions => foo (not a valid array)" do
-      let(:params) { {:permissions => 'foo', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :permissions => 'foo',
+          :target      => '/bar/baz'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not an Array/) }
     end
@@ -70,30 +107,43 @@ describe('icinga2::object::apiuser', :type => :define) do
 end
 
 describe('icinga2::object::apiuser', :type => :define) do
-  let(:facts) { {
-      :kernel => 'Windows',
-      :architecture => 'x86_64',
-      :osfamily => 'Windows',
-      :operatingsystem => 'Windows',
+  let(:facts) do
+    {
+      :kernel                    => 'Windows',
+      :architecture              => 'x86_64',
+      :osfamily                  => 'Windows',
+      :operatingsystem           => 'Windows',
       :operatingsystemmajrelease => '2012 R2',
       :path => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\facter\bin;
-               C:\Program Files\Puppet Labs\Puppet\hiera\bin;
-               C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
-               C:\Program Files\Puppet Labs\Puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
-               C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
-               C:\Windows\System32\WindowsPowerShell\v1.0\;
-               C:\ProgramData\chocolatey\bin;',
-  } }
-  let(:title) { 'bar' }
-  let(:pre_condition) { [
+                C:\Program Files\Puppet Labs\Puppet\facter\bin;
+                C:\Program Files\Puppet Labs\Puppet\hiera\bin;
+                C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
+                C:\Program Files\Puppet Labs\Puppet\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
+                C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
+                C:\Windows\System32\WindowsPowerShell\v1.0\;
+                C:\ProgramData\chocolatey\bin;',
+    }
+  end
+
+  let(:title) do
+    'bar'
+  end
+
+  let(:pre_condition) do
+    [
       "class { 'icinga2': }"
-  ] }
+    ]
+  end
 
   context "Windows 2012 R2  with all defaults and permissions => ['*'], target => C:/bar/baz" do
-    let(:params) { {:target =>  'C:/bar/baz', :permissions => ['*']} }
+    let(:params) do
+      {
+        :target      => 'C:/bar/baz',
+        :permissions => ['*']
+      }
+    end
 
     it { is_expected.to contain_concat('C:/bar/baz') }
 
@@ -108,14 +158,25 @@ describe('icinga2::object::apiuser', :type => :define) do
 
 
   context "Windows 2012 R2  with target => C:bar/baz (not valid absolute path)" do
-    let(:params) { {:target => 'C:bar/baz', :permissions => ['*']} }
+    let(:params) do
+      {
+        :target      => 'C:bar/baz',
+        :permissions => ['*']
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"C:bar\/baz" is not an absolute path/) }
   end
 
 
   context "Windows 2012 R2  with password => foo" do
-    let(:params) { {:password => 'foo', :permissions => ['*'], :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :password    => 'foo',
+        :permissions => ['*'],
+        :target      => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::ApiUser::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -124,7 +185,13 @@ describe('icinga2::object::apiuser', :type => :define) do
 
 
   context "Windows 2012 R2  with client_cn => foo" do
-    let(:params) { {:client_cn => 'foo', :permissions => ['*'], :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :client_cn   => 'foo',
+        :permissions => ['*'],
+        :target      => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::ApiUser::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -133,7 +200,12 @@ describe('icinga2::object::apiuser', :type => :define) do
 
 
   context "Windows 2012 R2  with permissions => [foo, bar]" do
-    let(:params) { {:permissions => ['foo', 'bar'], :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :permissions => ['foo', 'bar'],
+        :target      => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::ApiUser::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -142,7 +214,12 @@ describe('icinga2::object::apiuser', :type => :define) do
 
 
   context "Windows 2012 R2  with permissions => foo (not a valid array)" do
-    let(:params) { {:permissions => 'foo', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :permissions => 'foo',
+        :target      => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not an Array/) }
   end

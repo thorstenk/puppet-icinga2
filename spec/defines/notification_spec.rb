@@ -1,18 +1,27 @@
 require 'spec_helper'
 
 describe('icinga2::object::notification', :type => :define) do
-  let(:title) { 'bar' }
-  let(:pre_condition) { [
+  let(:title) do
+    'bar'
+  end
+
+  let(:pre_condition) do
+    [
       "class { 'icinga2': }"
-  ] }
+    ]
+  end
 
   on_supported_os.each do |os, facts|
-    let :facts do
+    let(:facts) do
       facts
     end
 
     context "#{os} with all defaults and target => /bar/baz" do
-      let(:params) { {:target =>  '/bar/baz'} }
+      let(:params) do
+        {
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat('/bar/baz') }
 
@@ -26,7 +35,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with notification_name => foo" do
-      let(:params) { {:notification_name => 'foo', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :notification_name => 'foo',
+          :target            => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -35,7 +49,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with host_name => foo" do
-      let(:params) { {:host_name => 'foo', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :host_name => 'foo',
+          :target    => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -44,7 +63,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with service_name => foo" do
-      let(:params) { {:service_name => 'foo', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :service_name => 'foo',
+          :target       => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -53,7 +77,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with vars => { foo => 'bar', bar => 'foo' }" do
-      let(:params) { {:vars => { 'foo' => "bar", 'bar' => "foo"}, :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :vars   => { 'foo' => "bar", 'bar' => "foo"},
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({ 'target' => '/bar/baz' })
@@ -63,7 +92,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with users => [foo, bar]" do
-      let(:params) { {:users => ['foo','bar'], :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :users  => ['foo','bar'],
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -72,7 +106,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with users => host.vars.notification.mail.users" do
-      let(:params) { {:users => 'host.vars.notification.mail.users', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :users  => 'host.vars.notification.mail.users',
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -81,7 +120,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with user_groups => [foo, bar]" do
-      let(:params) { {:user_groups => ['foo','bar'], :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :user_groups => ['foo','bar'],
+          :target      => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -90,7 +134,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with user_groups => host.vars.notification.mail.groups" do
-      let(:params) { {:user_groups => 'host.vars.notification.mail.groups', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :user_groups => 'host.vars.notification.mail.groups',
+          :target      => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -99,7 +148,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with times => { foo => 'bar', bar => 'foo' }" do
-      let(:params) { {:times => { 'foo' => "bar", 'bar' => "foo"}, :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :times  => { 'foo' => "bar", 'bar' => "foo"},
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({ 'target' => '/bar/baz' })
@@ -108,14 +162,24 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with times => 'foo' (not a valid hash)" do
-      let(:params) { {:times => 'foo', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :times  => 'foo',
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" is not a Hash/) }
     end
 
 
     context "#{os} with command => foo" do
-      let(:params) { {:command => 'foo', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :command => 'foo',
+          :target  => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -124,7 +188,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with interval => 30" do
-      let(:params) { {:interval => '30', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :interval => '30',
+          :target   => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -133,7 +202,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with interval => 30m" do
-      let(:params) { {:interval => '30m', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :interval => '30m',
+          :target   => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -142,14 +216,24 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with interval => foo (not a valid integer)" do
-      let(:params) { {:interval => 'foo', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :interval => 'foo',
+          :target   => '/bar/baz'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo" does not match/) }
     end
 
 
     context "#{os} with period => foo" do
-      let(:params) { {:period => 'foo', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :period => 'foo',
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -158,7 +242,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with zone => foo" do
-      let(:params) { {:zone => 'foo', :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :zone   => 'foo',
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -167,7 +256,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with types => [foo, bar]" do
-      let(:params) { {:types => ['foo','bar'], :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :types  => ['foo','bar'],
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -176,7 +270,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with states => [foo, bar]" do
-      let(:params) { {:states => ['foo','bar'], :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :states => ['foo','bar'],
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                               .with({'target' => '/bar/baz'})
@@ -185,7 +284,13 @@ describe('icinga2::object::notification', :type => :define) do
 
 
     context "#{os} with assign => [] and ignore => [ foo ]" do
-      let(:params) { {:assign => [], :ignore => ['foo'], :target => '/bar/baz'} }
+      let(:params) do
+        {
+          :assign => [],
+          :ignore => ['foo'],
+          :target => '/bar/baz'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /When attribute ignore is used, assign must be set/) }
     end
@@ -193,31 +298,43 @@ describe('icinga2::object::notification', :type => :define) do
 end
 
 describe('icinga2::object::notification', :type => :define) do
-  let(:facts) { {
-      :kernel => 'Windows',
-      :architecture => 'x86_64',
-      :osfamily => 'Windows',
-      :operatingsystem => 'Windows',
+  let(:facts) do
+    {
+      :kernel                    => 'Windows',
+      :architecture              => 'x86_64',
+      :osfamily                  => 'Windows',
+      :operatingsystem           => 'Windows',
       :operatingsystemmajrelease => '2012 R2',
       :path => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\facter\bin;
-               C:\Program Files\Puppet Labs\Puppet\hiera\bin;
-               C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
-               C:\Program Files\Puppet Labs\Puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
-               C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
-               C:\Windows\System32\WindowsPowerShell\v1.0\;
-               C:\ProgramData\chocolatey\bin;',
-  } }
-  let(:title) { 'bar' }
-  let(:pre_condition) { [
+                C:\Program Files\Puppet Labs\Puppet\facter\bin;
+                C:\Program Files\Puppet Labs\Puppet\hiera\bin;
+                C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
+                C:\Program Files\Puppet Labs\Puppet\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
+                C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
+                C:\Windows\System32\WindowsPowerShell\v1.0\;
+                C:\ProgramData\chocolatey\bin;',
+    }
+  end
+
+  let(:title) do
+    'bar'
+  end
+
+  let(:pre_condition) do
+    [
       "class { 'icinga2': }"
-  ] }
+    ]
+  end
 
 
   context "Windows 2012 R2 with all defaults and target => C:/bar/baz" do
-    let(:params) { {:target =>  'C:/bar/baz'} }
+    let(:params) do
+      {
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat('C:/bar/baz') }
 
@@ -231,7 +348,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with notification_name => foo" do
-    let(:params) { {:notification_name => 'foo', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :notification_name => 'foo',
+        :target            => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -240,7 +362,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with host_name => foo" do
-    let(:params) { {:host_name => 'foo', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :host_name => 'foo',
+        :target    => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -249,7 +376,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with service_name => foo" do
-    let(:params) { {:service_name => 'foo', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :service_name => 'foo',
+        :target       => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -258,7 +390,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with vars => { foo => 'bar', bar => 'foo' }" do
-    let(:params) { {:vars => { 'foo' => "bar", 'bar' => "foo"}, :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :vars   => { 'foo' => "bar", 'bar' => "foo"},
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({ 'target' => 'C:/bar/baz' })
@@ -268,7 +405,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with users => [foo, bar]" do
-    let(:params) { {:users => ['foo','bar'], :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :users  => ['foo','bar'],
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -277,7 +419,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with users => host.vars.notification.mail.users" do
-    let(:params) { {:users => 'host.vars.notification.mail.users', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :users  => 'host.vars.notification.mail.users',
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -286,7 +433,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with user_groups => [foo, bar]" do
-    let(:params) { {:user_groups => ['foo','bar'], :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :user_groups => ['foo','bar'],
+        :target      => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -295,7 +447,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with user_groups => host.vars.notification.mail.groups" do
-    let(:params) { {:user_groups => 'host.vars.notification.mail.groups', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :user_groups => 'host.vars.notification.mail.groups',
+        :target      => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -304,7 +461,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with times => { foo => 'bar', bar => 'foo' }" do
-    let(:params) { {:times => { 'foo' => "bar", 'bar' => "foo"}, :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :times  => { 'foo' => "bar", 'bar' => "foo"},
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({ 'target' => 'C:/bar/baz' })
@@ -313,14 +475,24 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with times => 'foo' (not a valid hash)" do
-    let(:params) { {:times => 'foo', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :times  => 'foo',
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" is not a Hash/) }
   end
 
 
   context "Windows 2012 R2 with command => foo" do
-    let(:params) { {:command => 'foo', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :command => 'foo',
+        :target  => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -329,7 +501,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with interval => 30" do
-    let(:params) { {:interval => '30', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :interval => '30',
+        :target   => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -338,7 +515,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with interval => 30m" do
-    let(:params) { {:interval => '30m', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :interval => '30m',
+        :target   => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -347,14 +529,24 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with interval => foo (not a valid integer)" do
-    let(:params) { {:interval => 'foo', :target => '/bar/baz'} }
+    let(:params) do
+      {
+        :interval => 'foo',
+        :target   => '/bar/baz'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo" does not match/) }
   end
 
 
   context "Windows 2012 R2 with period => foo" do
-    let(:params) { {:period => 'foo', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :period => 'foo',
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -363,7 +555,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with zone => foo" do
-    let(:params) { {:zone => 'foo', :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :zone   => 'foo',
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -372,7 +569,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with types => [foo, bar]" do
-    let(:params) { {:types => ['foo','bar'], :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :types  => ['foo','bar'],
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -381,7 +583,12 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with states => [foo, bar]" do
-    let(:params) { {:states => ['foo','bar'], :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :states => ['foo','bar'],
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::Notification::bar')
                             .with({'target' => 'C:/bar/baz'})
@@ -390,7 +597,13 @@ describe('icinga2::object::notification', :type => :define) do
 
 
   context "Windows 2012 R2 with assign => [] and ignore => [ foo ]" do
-    let(:params) { {:assign => [], :ignore => ['foo'], :target => 'C:/bar/baz'} }
+    let(:params) do
+      {
+        :assign => [],
+        :ignore => ['foo'],
+        :target => 'C:/bar/baz'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /When attribute ignore is used, assign must be set/) }
   end

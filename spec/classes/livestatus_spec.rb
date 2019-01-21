@@ -1,18 +1,24 @@
 require 'spec_helper'
 
 describe('icinga2::feature::livestatus', :type => :class) do
-  let(:pre_condition) { [
-    "class { 'icinga2': features => [], }"
-  ] }
+  let(:pre_condition) do
+    [
+      "class { 'icinga2': features => [], }"
+    ]
+  end
 
   on_supported_os.each do |os, facts|
-    let :facts do
+    let(:facts) do
       facts
     end
 
 
     context "#{os} with ensure => present" do
-      let(:params) { {:ensure => 'present'} }
+      let(:params) do
+        {
+          :ensure => 'present'
+        }
+      end
 
       it { is_expected.to contain_icinga2__feature('livestatus').with({'ensure' => 'present'}) }
 
@@ -23,7 +29,11 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
     context "#{os} with ensure => absent" do
-      let(:params) { {:ensure => 'absent'} }
+      let(:params) do
+        {
+          :ensure => 'absent'
+        }
+      end
 
       it { is_expected.to contain_icinga2__feature('livestatus').with({'ensure' => 'absent'}) }
 
@@ -46,7 +56,11 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
     context "#{os} with socket_type => tcp" do
-      let(:params) { {:socket_type => 'tcp'} }
+      let(:params) do
+        {
+          :socket_type => 'tcp'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::LivestatusListener::livestatus')
         .with({ 'target' => '/etc/icinga2/features-available/livestatus.conf' })
@@ -55,14 +69,22 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
     context "#{os} with socket_type => foo (not a valid value)" do
-      let(:params) { {:socket_type => 'foo'} }
+      let(:params) do
+        {
+          :socket_type => 'foo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /foo isn't supported. Valid values are 'unix' and 'tcp'./) }
     end
 
 
     context "#{os} with bind_host => foo.example.com" do
-      let(:params) { {:bind_host => 'foo.example.com'} }
+      let(:params) do
+        {
+          :bind_host => 'foo.example.com'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::LivestatusListener::livestatus')
         .with({ 'target' => '/etc/icinga2/features-available/livestatus.conf' })
@@ -71,7 +93,11 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
     context "#{os} with bind_port => 4247" do
-      let(:params) { {:bind_port => '4247'} }
+      let(:params) do
+        {
+          :bind_port => '4247'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::LivestatusListener::livestatus')
         .with({ 'target' => '/etc/icinga2/features-available/livestatus.conf' })
@@ -80,14 +106,22 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
     context "#{os} with bind_port => foo (not a valid integer)" do
-      let(:params) { {:bind_port => 'foo'} }
+      let(:params) do
+        {
+          :bind_port => 'foo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /first argument to be an Integer/) }
     end
 
 
     context "#{os} with socket_path => /foo/bar" do
-      let(:params) { {:socket_path => '/foo/bar'} }
+      let(:params) do
+        {
+          :socket_path => '/foo/bar'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::LivestatusListener::livestatus')
         .with({ 'target' => '/etc/icinga2/features-available/livestatus.conf' })
@@ -96,14 +130,22 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
     context "#{os} with socket_path => foo/bar (not an absolute path)" do
-      let(:params) { {:socket_path => 'foo/bar'} }
+      let(:params) do
+        {
+          :socket_path => 'foo/bar'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
     end
 
 
     context "#{os} with compat_log_path => /foo/bar" do
-      let(:params) { {:compat_log_path => '/foo/bar'} }
+      let(:params) do
+        {
+          :compat_log_path => '/foo/bar'
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::LivestatusListener::livestatus')
         .with({ 'target' => '/etc/icinga2/features-available/livestatus.conf' })
@@ -112,7 +154,11 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
     context "#{os} with compat_log_path => foo/bar (not an absolute path)" do
-      let(:params) { {:compat_log_path => 'foo/bar'} }
+      let(:params) do
+        {
+          :compat_log_path => 'foo/bar'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
     end
@@ -120,30 +166,38 @@ describe('icinga2::feature::livestatus', :type => :class) do
 end
 
 describe('icinga2::feature::livestatus', :type => :class) do
-  let(:facts) { {
-      :kernel => 'Windows',
-      :architecture => 'x86_64',
-      :osfamily => 'Windows',
-      :operatingsystem => 'Windows',
+  let(:facts) do
+    {
+      :kernel                    => 'Windows',
+      :architecture              => 'x86_64',
+      :osfamily                  => 'Windows',
+      :operatingsystem           => 'Windows',
       :operatingsystemmajrelease => '2012 R2',
       :path => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\facter\bin;
-               C:\Program Files\Puppet Labs\Puppet\hiera\bin;
-               C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
-               C:\Program Files\Puppet Labs\Puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
-               C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
-               C:\Windows\System32\WindowsPowerShell\v1.0\;
-               C:\ProgramData\chocolatey\bin;',
-  } }
+                C:\Program Files\Puppet Labs\Puppet\facter\bin;
+                C:\Program Files\Puppet Labs\Puppet\hiera\bin;
+                C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
+                C:\Program Files\Puppet Labs\Puppet\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
+                C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
+                C:\Windows\System32\WindowsPowerShell\v1.0\;
+                C:\ProgramData\chocolatey\bin;',
+    }
+  end
 
-  let(:pre_condition) { [
+  let(:pre_condition) do
+    [
       "class { 'icinga2': features => [], }"
-  ] }
+    ]
+  end
 
   context 'Windows 2012 R2 with ensure => present' do
-    let(:params) { {:ensure => 'present'} }
+    let(:params) do
+      {
+        :ensure => 'present'
+      }
+    end
 
     it { is_expected.to contain_icinga2__feature('livestatus').with({'ensure' => 'present'}) }
 
@@ -154,7 +208,11 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
   context 'Windows 2012 R2 with ensure => absent' do
-    let(:params) { {:ensure => 'absent'} }
+    let(:params) do
+      {
+        :ensure => 'absent'
+      }
+    end
 
     it { is_expected.to contain_icinga2__feature('livestatus').with({'ensure' => 'absent'}) }
 
@@ -177,7 +235,11 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
   context 'Windows 2012 R2 with socket_type => tcp' do
-    let(:params) { {:socket_type => 'tcp'} }
+    let(:params) do
+      {
+        :socket_type => 'tcp'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::LivestatusListener::livestatus')
                             .with({ 'target' => 'C:/ProgramData/icinga2/etc/icinga2/features-available/livestatus.conf' })
@@ -186,14 +248,22 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
   context 'Windows 2012 R2 with socket_type => foo (not a valid value)' do
-    let(:params) { {:socket_type => 'foo'} }
+    let(:params) do
+      {
+        :socket_type => 'foo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /foo isn't supported. Valid values are 'unix' and 'tcp'./) }
   end
 
 
   context "Windows 2012 R2 with bind_host => foo.example.com" do
-    let(:params) { {:bind_host => 'foo.example.com'} }
+    let(:params) do
+      {
+        :bind_host => 'foo.example.com'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::LivestatusListener::livestatus')
                             .with({ 'target' => 'C:/ProgramData/icinga2/etc/icinga2/features-available/livestatus.conf' })
@@ -202,7 +272,11 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
   context "Windows 2012 R2 with bind_port => 4247" do
-    let(:params) { {:bind_port => '4247'} }
+    let(:params) do
+      {
+        :bind_port => '4247'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::LivestatusListener::livestatus')
                             .with({ 'target' => 'C:/ProgramData/icinga2/etc/icinga2/features-available/livestatus.conf' })
@@ -211,14 +285,22 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
   context "Windows 2012 R2 with bind_port => foo (not a valid integer)" do
-    let(:params) { {:bind_port => 'foo'} }
+    let(:params) do
+      {
+        :bind_port => 'foo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /first argument to be an Integer/) }
   end
 
 
   context 'Windows 2012 R2 with socket_path => c:/foo/bar' do
-    let(:params) { {:socket_path => 'c:/foo/bar'} }
+    let(:params) do
+      {
+        :socket_path => 'c:/foo/bar'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::LivestatusListener::livestatus')
                             .with({ 'target' => 'C:/ProgramData/icinga2/etc/icinga2/features-available/livestatus.conf' })
@@ -227,14 +309,22 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
   context 'Windows 2012 R2 with socket_path => foo/bar (not an absolute path)' do
-    let(:params) { {:socket_path => 'foo/bar'} }
+    let(:params) do
+      {
+        :socket_path => 'foo/bar'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
   end
 
 
   context 'Windows 2012 R2 with compat_log_path => c:/foo/bar' do
-    let(:params) { {:compat_log_path => 'c:/foo/bar'} }
+    let(:params) do
+      {
+        :compat_log_path => 'c:/foo/bar'
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::LivestatusListener::livestatus')
                             .with({ 'target' => 'C:/ProgramData/icinga2/etc/icinga2/features-available/livestatus.conf' })
@@ -243,7 +333,11 @@ describe('icinga2::feature::livestatus', :type => :class) do
 
 
   context 'Windows 2012 R2 with compat_log_path => foo/bar (not an absolute path)' do
-    let(:params) { {:compat_log_path => 'foo/bar'} }
+    let(:params) do
+      {
+        :compat_log_path => 'foo/bar'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /"foo\/bar" is not an absolute path/) }
   end

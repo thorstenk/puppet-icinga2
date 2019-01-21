@@ -1,17 +1,23 @@
 require 'spec_helper'
 
 describe('icinga2::feature::checker', :type => :class) do
-  let(:pre_condition) { [
-    "class { 'icinga2': features => [], }"
-  ] }
+  let(:pre_condition) do
+    [
+      "class { 'icinga2': features => [], }"
+    ]
+  end
 
   on_supported_os.each do |os, facts|
-    let :facts do
+    let(:facts) do
       facts
     end
 
     context "#{os} with ensure => present" do
-      let(:params) { {:ensure => 'present'} }
+      let(:params) do
+        {
+          :ensure => 'present'
+        }
+      end
 
       it { is_expected.to contain_icinga2__feature('checker').with({'ensure' => 'present'}) }
 
@@ -22,7 +28,11 @@ describe('icinga2::feature::checker', :type => :class) do
 
 
     context "#{os} with ensure => absent" do
-      let(:params) { {:ensure => 'absent'} }
+      let(:params) do
+        {
+          :ensure => 'absent'
+        }
+      end
 
       it { is_expected.to contain_icinga2__feature('checker').with({'ensure' => 'absent'}) }
 
@@ -32,7 +42,11 @@ describe('icinga2::feature::checker', :type => :class) do
 
 
     context "#{os} with concurrent_checks => 100" do
-      let(:params) { {:concurrent_checks => 100} }
+      let(:params) do
+        {
+          :concurrent_checks => 100
+        }
+      end
 
       it { is_expected.to contain_concat__fragment('icinga2::object::CheckerComponent::checker')
         .with({ 'target' => '/etc/icinga2/features-available/checker.conf' })
@@ -41,7 +55,11 @@ describe('icinga2::feature::checker', :type => :class) do
 
 
     context "#{os} with concurrent_checks => foo (not a valid integer)" do
-      let(:params) { {:concurrent_checks => 'foo'} }
+      let(:params) do
+        {
+          :concurrent_checks => 'foo'
+        }
+      end
 
       it { is_expected.to raise_error(Puppet::Error, /first argument to be an Integer/) }
     end
@@ -50,30 +68,38 @@ describe('icinga2::feature::checker', :type => :class) do
 end
 
 describe('icinga2::feature::checker', :type => :class) do
-  let(:facts) { {
-      :kernel => 'Windows',
-      :architecture => 'x86_64',
-      :osfamily => 'Windows',
-      :operatingsystem => 'Windows',
+  let(:facts) do
+    {
+      :kernel                    => 'Windows',
+      :architecture              => 'x86_64',
+      :osfamily                  => 'Windows',
+      :operatingsystem           => 'Windows',
       :operatingsystemmajrelease => '2012 R2',
       :path => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\facter\bin;
-               C:\Program Files\Puppet Labs\Puppet\hiera\bin;
-               C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
-               C:\Program Files\Puppet Labs\Puppet\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
-               C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
-               C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
-               C:\Windows\System32\WindowsPowerShell\v1.0\;
-               C:\ProgramData\chocolatey\bin;',
-  } }
+                C:\Program Files\Puppet Labs\Puppet\facter\bin;
+                C:\Program Files\Puppet Labs\Puppet\hiera\bin;
+                C:\Program Files\Puppet Labs\Puppet\mcollective\bin;
+                C:\Program Files\Puppet Labs\Puppet\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\ruby\bin;
+                C:\Program Files\Puppet Labs\Puppet\sys\tools\bin;
+                C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
+                C:\Windows\System32\WindowsPowerShell\v1.0\;
+                C:\ProgramData\chocolatey\bin;',
+      }
+    end
 
-  let(:pre_condition) { [
+  let(:pre_condition) do
+    [
       "class { 'icinga2': features => [], }"
-  ] }
+    ]
+  end
 
   context 'Windows 2012 R2 with ensure => present' do
-    let(:params) { {:ensure => 'present'} }
+    let(:params) do
+      {
+        :ensure => 'present'
+      }
+    end
 
     it { is_expected.to contain_icinga2__feature('checker').with({'ensure' => 'present'}) }
 
@@ -84,7 +110,11 @@ describe('icinga2::feature::checker', :type => :class) do
 
 
   context 'Windows 2012 R2 with ensure => absent' do
-    let(:params) { {:ensure => 'absent'} }
+    let(:params) do
+      {
+        :ensure => 'absent'
+      }
+    end
 
     it { is_expected.to contain_icinga2__feature('checker').with({'ensure' => 'absent'}) }
 
@@ -94,7 +124,11 @@ describe('icinga2::feature::checker', :type => :class) do
 
 
   context "Windows 2012 R2 with concurrent_checks => 100" do
-    let(:params) { {:concurrent_checks => 100} }
+    let(:params) do
+      {
+        :concurrent_checks => 100
+      }
+    end
 
     it { is_expected.to contain_concat__fragment('icinga2::object::CheckerComponent::checker')
                             .with({ 'target' => 'C:/ProgramData/icinga2/etc/icinga2/features-available/checker.conf' })
@@ -103,7 +137,11 @@ describe('icinga2::feature::checker', :type => :class) do
 
 
   context "Windows 2012 R2 with concurrent_checks => foo (not a valid integer)" do
-    let(:params) { {:concurrent_checks => 'foo'} }
+    let(:params) do
+      {
+        :concurrent_checks => 'foo'
+      }
+    end
 
     it { is_expected.to raise_error(Puppet::Error, /first argument to be an Integer/) }
   end
